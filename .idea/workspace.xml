@@ -26,8 +26,8 @@
       <file leaf-file-name="cowHead.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cowHead.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="23" column="1" selection-start-line="23" selection-start-column="1" selection-end-line="32" selection-end-column="13" />
+            <state relative-caret-position="465">
+              <caret line="42" column="56" selection-start-line="0" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -190,17 +190,29 @@
       <option name="presentableId" value="Default" />
       <updated>1494479835731</updated>
       <workItem from="1494479837640" duration="7001000" />
+<<<<<<< Updated upstream
       <workItem from="1495773802572" duration="9916000" />
       <workItem from="1496123364523" duration="4000" />
+=======
+      <workItem from="1495773802572" duration="10008000" />
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< Updated upstream
     <option name="totallyTimeSpent" value="16921000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="797" extended-state="0" />
     <editor active="false" />
+=======
+    <option name="totallyTimeSpent" value="17009000" />
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="0" y="23" width="1440" height="797" extended-state="0" />
+    <editor active="true" />
+>>>>>>> Stashed changes
     <layout>
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -246,6 +258,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cowHead.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
@@ -256,6 +269,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="23" column="1" selection-start-line="23" selection-start-column="1" selection-end-line="32" selection-end-column="13" />
+=======
+        <state relative-caret-position="465">
+          <caret line="42" column="56" selection-start-line="0" selection-start-column="0" selection-end-line="148" selection-end-column="0" />
+>>>>>>> Stashed changes
           <folding />
         </state>
       </provider>
