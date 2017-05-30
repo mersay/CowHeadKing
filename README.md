@@ -15,7 +15,7 @@ Example :<br />
 5<br />
 6<br />
 88<br />
-29<br />a
+29<br />
 
 Round 1: <br />
 Player 1's card : 7<br />
