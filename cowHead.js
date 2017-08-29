@@ -5,12 +5,11 @@
 let numberOfRows = 4;
 let numberOfCardsForEachPlayer = 10;
 let numberOfPlayers = 4//getRandomIntInclusive(4,10);
-let playersCowHeads = Array.from({length:numberOfPlayers});
-let players = Array.from({length: numberOfPlayers}, (v, i) => new Array(numberOfCardsForEachPlayer));
+let playersCowHeads = Array.from({length:numberOfPlayers},(v,i)=> 0);
+let players = Array.from({length: numberOfPlayers}, (v, i) => new Array());
 let cards = Array.from({length: 104}, (v, i) => v = {value: i+1, cowHeads: 0});
 let rows =  Array.from({length: 4}, (v, i) => new Array(0));
-let collectedCards = Array.from({length: numberOfPlayers}, (v,i) => new Array(104));//explain why 104
-let round = Array.from({length: numberOfPlayers});
+let round = [];
 
 
 function getRandomIntInclusive(min, max) {
@@ -34,6 +33,22 @@ function giveCowHeads(num) {
   }
 }
 
+//given cards, count total number of cowHeads
+function countCowHeads(cards) {
+  let num = 0;
+  for(let card of cards) {
+    num += card.cowHeads;
+  }
+  return num;
+}
+
+
+function findPlayerOfCard(card,orgArr){
+  for (var i = 0; i < orgArr.length; i++) {
+    if (orgArr[i].value == card.value) {return i;}
+  }
+  return -1;
+}
 //write some best strategies
 
 function gameStart(){
@@ -42,107 +57,107 @@ function gameStart(){
   //assignCowHeads
   cards.forEach((card) => {card.cowHeads = giveCowHeads(card.value)});
 
-  console.log("before giving cards to players,cards is",cards, "row is ", rows);
-
+  //give cards to players
   for (var i=0; i< numberOfPlayers; i++) {
     for (var j= 0; j< numberOfCardsForEachPlayer; j++) {
       let len = cards.length;
       let rand = getRandomIntInclusive(0,len-1);
-      players[i][j] = cards[rand];
+      players[i].push(cards[rand]);
       cards.splice(rand, 1);
     }
   }
 
-  console.log("after giving cards to players,cards is",cards, "row is ", rows);
+  players.forEach((arr) => arr.sort(function(a, b) { return a.value - b.value; }));
 
-  players.forEach((arr) => arr.sort(function(a, b) { return a - b; }));
-
+  //put one card to each row
   for (var row = 0; row < numberOfRows; row++) {
     //reuse!!
     let len = cards.length;
     let rand = getRandomIntInclusive(0,len-1);
     rows[row][0]  = cards[rand];
+    console.log(cards[rand]);
     cards.splice(rand, 1);
 
   }
 
-  console.log("after giving cards to rows,cards is",cards, "row is ", rows);
-
-
   //debug
-  console.log("number of players:", numberOfPlayers, players, "cards left", cards, "rows", rows);
+  console.log("number of players:", numberOfPlayers, players, "cards left", cards, "rows", rows,"players' cards", players);
 
-  //TODO:select row with less cowHeads
-  //TODO:timer to select a random row
-
-  /*
-
-  for (var i = 0; i < numberOfCardsForEachPlayer; i++) {
-    //for each player, select a random card from their hand of cards,
-    for(var j= 0; j < numberOfPlayers; j++) {
-      let len = players[j].length;
-      let rand = getRandomIntInclusive(0,len-1);
-      round[j] = players[j][rand];
-      players[j].splice(rand, 1);
-    }
-  } */
+  //TODO: select row with less cowHeads //
+  //TODO: timer to select a random row
+  //TODO: let player select a row if smallest
 
 }
 
-function getCowHeads(cards) {
-  let num = 0;
-  for(let card in cards) {
-    num += card.cowHeads;
+function playARound() {
+
+  //for each player, select a random card from their hand of cards,
+  for(var j= 0; j < numberOfPlayers; j++) {
+    let len = players[j].length;
+    let rand = getRandomIntInclusive(0,len-1);
+    round[j] = players[j][rand];
+    players[j].splice(rand, 1);
   }
-  return num;
-}
 
-//checkCard, not cards because it would be hard to track who used the card
-function putCard(player,card) {
-  console.log("rows", rows, "Card", card);
-  //arr.sort(function(a, b) { return a - b; });
-  //get all last card of each row out and get smallest differnce
+  let order = round.slice();  //dont use order = round because referring to same address
 
-  let smallerThanAllRows = true;
-  let rowToPut = 0;
-  let leastCowHeads = getCowHeads(rows[0]);
-  let leastCowHeadRow = 0;
-  let len = rows[rowToPut].length;
-  console.log(card.value, rows[rowToPut][len-1].value);
-  let difference = card.value - rows[rowToPut][len-1].value;
 
-  for(let row in rows) {
-    let len = row.length;
-    if (row[len-1] < card.value) smallerThanAllRows = false;
-    console.log(row[len-1].value,card.value , row[len-1].value<card.value)
-    if (leastCowHeads > getCowHeads(row)) {
-      console.log("found least ch row",row.key,getCowHeads(row));
-      leastCowHeads = getCowHeads(row);
-      leastCowHeadRow = row.key;
+  async function findOrderOfRound() {
+    console.log("r",round,"o",order);
+    order.sort((a,b) => {return a.value - b.value});
+    for (let card of order) {
+      await putCard(findPlayerOfCard(card,round) ,card)
+    };
+  }
+
+  findOrderOfRound();
+
+
+  //checkCard, not cards because it would be hard to track who used the card
+  function putCard(player,card) {
+    //arr.sort(function(a, b) { return a - b; });
+
+    let smallerThanAllRows = false;
+    let rowToPut = 0;
+    //get all last card of each row out and get smallest difference
+    let diffArray = [];
+
+    for (let row of rows) {
+      //get last card of every row
+      diffArray.push(card.value - row.slice(-1)[0].value);
     }
-  }
 
-  if (smallerThanAllRows) {
-    console.log("smallerthanallrows");
-    playersCowHeads[player] += getCowHeads(rows[leastCowHeadRow]);
-    rows[leastCowHeadRow]= [];
-  } else {
-    for (let row in rows) {
-      let len = row.length;
-      if (card.value - row[len-1].value > difference) {
-        rowToPut = row.key;
-        difference = card.value - row[len-1].value;
+    if (diffArray.filter((a,b) => a>0).length == 0) smallerThanAllRows = true;
+
+    if (smallerThanAllRows) {
+
+      let cowHeadsOfRows = [];
+      for (let row of rows) {
+        cowHeadsOfRows.push(countCowHeads(row));
       }
-    }
-
-    if (rows[rowToPut].length == 5) {
-      playersCowHeads[player] += getCowHeads(rows[rowToPut]);
+      rowToPut = cowHeadsOfRows.indexOf(Math.min(...cowHeadsOfRows));
+      playersCowHeads[player] += countCowHeads(rows[rowToPut]);
       rows[rowToPut] = [];
-    }
-  }
 
-  rows[rowToPut].push(card);
+    } else {
+
+      diffArray = diffArray.map((a) => a < 0 ? 104 : a);
+      rowToPut = diffArray.indexOf(Math.min(...diffArray));
+
+      if (rows[rowToPut].length == 5) {
+        playersCowHeads[player] += countCowHeads(rows[rowToPut]);
+        rows[rowToPut] = [];
+      }
+      
+    }
+    rows[rowToPut].push(card);
+
+  }
 
 
 }
+
+
+
+
 
